@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="head">CHAT</header>
+
+    <div id="start-page" class="page active">
+      <h1>Добро пожаловать</h1>
+      <h2>Ты:</h2>
+
+      <div class="select">
+          <select id="my-gender">
+              <option value="male">Мужской</option>
+              <option value="female">Женский</option>
+            </select>
+            <select id="my-age">
+              <option value="1">от 18 до 25</option>
+              <option value="2">от 25 до 35</option>
+              <option value="3">от 35 до 50</option>
+            </select>
+      </div>
+
+      <h2>Кого ищем:</h2>
+      <div class="select">
+          <select id="gender">
+              <option value="male">Мужской</option>
+              <option value="female">Женский</option>
+            </select>
+            <select id="age">
+              <option value="1">от 18 до 25</option>
+              <option value="2">от 25 до 35</option>
+              <option value="3">от 35 до 50</option>
+            </select>
+      </div>
+      <button id="start-chat">Начать чат</button>
+    </div>
+
+    <script src="./index.js" type="module" defer></script>
+  </body>
+</html>
