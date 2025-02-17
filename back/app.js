@@ -27,7 +27,6 @@ app.get('/start', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log(" user connected",socket.id)
-
     socket.on('chat message', (msg) => {
         const messageData = {
             text:msg,

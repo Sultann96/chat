@@ -1,17 +1,22 @@
-// const startPage = document.querySelector("#start-page")
-// const chatPage = document.querySelector('#chat-page')
+const socket = io('http://localhost:3001')
 
 const startBtn = document.getElementById('start-chat')
 const genderSelect = document.querySelector('#gender')
 if (startBtn) {
     startBtn.addEventListener('click', () => {
-        const gender = genderSelect.value
+        const myGender = document.getElementById('my-gender').value
+        const myAge =document.getElementById('my-age').value
+        const searchGender = document.getElementById('gender').value
+        const searchAge = document.getElementById('age').value
+
+        socket.emit('register user', {gender: myGender, age:myAge})
+
+        socket.emit('search user', {gender: searchGender, age:searchAge})
 
         window.location.href = '/chat'
     })
 }
 
-const socket = io('http://localhost:3001')
 
 let form = document.querySelector('.input')
 let chat = document.querySelector('.chat')
@@ -47,8 +52,6 @@ function addMessage(messageData, isCurrentUser) {
     chat.classList.toggle('auto-scroll', needScroll)
 
     chat.scrollTop = chat.scrollHeight
-    // if (needScroll) {
-    // }
 }
 
 socket.on('chat message', (messageData) => {
