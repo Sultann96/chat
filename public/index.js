@@ -1,19 +1,71 @@
 const socket = io('http://localhost:3001')
 
 const startBtn = document.getElementById('start-chat')
-const genderSelect = document.querySelector('#gender')
+const loading = document.getElementById('loading')
+
+const formElements = [
+    document.getElementById('my-gender'),
+    document.getElementById('my-age'),
+    document.getElementById('gender'),
+    document.getElementById('age'),
+    startBtn
+]
+
 if (startBtn) {
+    let isSearching = false
+    let searchInterval = null
+
+    const cleanupSearch = () => {
+        clearInterval(searchInterval)
+        loading.classList.remove('visible')
+        loading.classList.add('hidden')
+        formElements.forEach(element => element.disabled = false)
+        isSearching = false
+        socket.off('search result', handleSearchResult)
+    }
+
+    const handleSearchResult = (result) => {
+        if (result.found) {
+            cleanupSearch()
+            window.location.href = '/chat'
+        }
+    }
+
     startBtn.addEventListener('click', () => {
-        const myGender = document.getElementById('my-gender').value
-        const myAge =document.getElementById('my-age').value
-        const searchGender = document.getElementById('gender').value
-        const searchAge = document.getElementById('age').value
+        if (isSearching) return
 
-        socket.emit('register user', {gender: myGender, age:myAge})
+        loading.classList.remove('hidden')
+        loading.classList.add('visible')
+        
+        isSearching = true
+        formElements.forEach(element => element.disabled = true)
 
-        socket.emit('search user', {gender: searchGender, age:searchAge})
+        const userData = {
 
-        window.location.href = '/chat'
+            myGender: document.getElementById('my-gender').value,
+            myAge: document.getElementById('my-age').value,
+            searchGender: document.getElementById('gender').value,
+            searchAge: document.getElementById('age').value
+        }
+
+
+        socket.emit('register user', { gender: userData.myGender, age: userData.myAge })
+
+        const searchUser = () => {
+            socket.emit('search user', { 
+                gender: userData.searchGender, 
+                age: userData.searchAge 
+            })
+        }
+
+        searchInterval= setInterval(searchUser,2000)
+        searchUser()
+
+
+
+        socket.on('search result', handleSearchResult)
+
+        socket.on('disconnect', cleanupSearch)
     })
 }
 
